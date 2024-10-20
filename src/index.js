@@ -1,17 +1,15 @@
-import express from "express";
-import userRoutes from "./routes/userRoutes.js";
-
+import express from 'express';
+import userRoutes from './routes/userRoutes';
 
 const app = express();
-const PORT = 8000;
-
-// Middleware para parsear el cuerpo de las solicitudes
 app.use(express.json());
 
-// Usar las rutas de usuarios
-app.use("/api/users", userRoutes);
+// Utiliza las rutas
+app.use('/api', userRoutes);
+
+const PORT = process.env.PORT || 3000;
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor escuchando en el puerto ${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });

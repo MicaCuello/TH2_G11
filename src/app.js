@@ -6,6 +6,7 @@ import connection from "./connection/connection.js";
 
 const app = express();
 
+// con estos middleware vamos a recibir lo que nos envien por formulario o js
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

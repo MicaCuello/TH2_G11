@@ -7,11 +7,11 @@ const app = express();
 app.use(logger);
 
 // Ejemplo de una ruta
-app.get('/users', (req, res) => {
+app.get('/users', (_req, res) => {
   res.send('Lista de usuarios');
 });
 
 // Arranca el servidor
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+app.listen(8000, () => {
+  console.log('Servidor corriendo en http://localhost:8000');
 });

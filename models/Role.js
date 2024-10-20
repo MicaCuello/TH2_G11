@@ -1,21 +1,27 @@
-// Importamos los modelos Role y User, que representan las tablas en nuestra base de datos.
-import Role from "./Role.js";
-import User from "./User.js";
+// models/Role.js
+import { DataTypes } from 'sequelize';
+import sequelize from '../connection/connection.js'; // Asegúrate de que la ruta sea correcta
 
-// Establecemos la relación entre Role y User:
-// Un Role puede tener muchos User (relación de uno a muchos).
-Role.hasMany(User, {
-  foreignKey: 'roleId', // Especificamos la clave foránea en la tabla User que referencia a Role.
-  sourceKey: 'id', // Especifica la clave primaria de la tabla Role que será utilizada en User.
-  as: 'users' // Alias para la relación, útil para identificar y consultar esta relación más fácilmente.
+// Definimos el modelo Role
+const Role = sequelize.define('Role', {
+  // Definimos los atributos del modelo
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true, // Incremento automático para el ID
+    primaryKey: true,    // Este campo es la clave primaria
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,    // Este campo no puede ser nulo
+  },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: true,     // Este campo puede ser nulo
+  },
+}, {
+  tableName: 'roles',    // Nombre de la tabla en la base de datos
+  timestamps: false,     // Desactiva timestamps si no se utilizan
 });
 
-// Un User pertenece a un Role (relación de muchos a uno).
-User.belongsTo(Role, {
-  foreignKey: 'roleId', // Especificamos la clave foránea en la tabla User que apunta a la tabla Role.
-  targetKey: 'id', // Especifica la clave primaria de la tabla Role que será utilizada en User.
-  as: 'role' // Alias para la relación, simplificando la consulta y manejo de roles en los usuarios.
-});
-
-// Exportamos los modelos para que puedan ser utilizados en otras partes de la aplicación.
-export { Role, User };
+// Exportamos el modelo para que pueda ser utilizado en otras partes de la aplicación
+export default Role;
