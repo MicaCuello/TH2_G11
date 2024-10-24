@@ -1,29 +1,48 @@
-import express from "express";
-import routes from "./src/routes/routes.js";
-import connection from "./connection/connection.js";
-// import User from "./models/User.js";
-// import Role from "./models/Role.js";
+import express from 'express';
+import connection from './connection/connection.js'; // Ajusta la ruta según tu estructura
+import { Role, Permission, RolePermission } from './models/index.js';
 
 const app = express();
 
-// con estos middleware vamos a recibir lo que nos envien por formulario o js
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const iniciarServidor = async () => {
+    try {
+        await connection.authenticate();
+        console.log('Conexión ha sido establecida correctamente.');
 
-app.use("/app", routes);
+        // Llama a la función de inicialización
+        await inicializarDatos();
 
-app.use((req, res, next) => {
-  res.status(404).send({
-    success: false,
-    message: "not found",
-  });
-});
+        app.listen(3000, () => {
+            console.log('Servidor en ejecución en http://localhost:3000');
+        });
+    } catch (error) {
+        console.error('No se pudo conectar a la base de datos:', error);
+    }
+};
 
-await connection.sync({force:false})
+// Función de inicialización
+const inicializarDatos = async () => {
+    try {
+        // Crear roles
+        const admin = await Role.create({ nombre: "Administrador" });
+        const broker = await Role.create({ nombre: "Broker" });
+        const user = await Role.create({ nombre: "Usuario" });
 
-// Utiliza las rutas de usuarios
-app.use("/api/users", userRoutes); // Asegúrate de que la ruta base coincida
+        // Crear permisos
+        const crearTarea = await Permission.create({ nombre: "Crear Tarea" });
+        const editarTarea = await Permission.create({ nombre: "Editar Tarea" });
+        const eliminarTarea = await Permission.create({ nombre: "Eliminar Tarea" });
 
-app.listen(8000, () => {
-  console.log(`🚀 ~ app.listen ~ localhost:8000`);
-});
+        // Relacionar roles y permisos
+        await RolePermission.create({ rolId: admin.id, permisoId: crearTarea.id });
+        await RolePermission.create({ rolId: admin.id, permisoId: editarTarea.id });
+        await RolePermission.create({ rolId: admin.id, permisoId: eliminarTarea.id });
+
+        console.log("Datos iniciales insertados correctamente.");
+    } catch (error) {
+        console.error("Error al inicializar datos:", error);
+    }
+};
+
+// Inicia el servidor
+iniciarServidor();

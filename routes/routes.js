@@ -21,7 +21,6 @@ routes.use("/user", userRoutes_js_1.default);
 // Ejemplos de rutas adicionales que podrían habilitarse para otras entidades como roles y productos.
 // Actualmente están comentadas, pero pueden habilitarse cuando se implementen esos archivos.
 // routes.use("/roles", rolesRoutes);
-// routes.use("/product", productRoutes);
 
 // Exporta las rutas para que se puedan integrar en el archivo principal del servidor (por ejemplo, index.js).
 const _default = routes;

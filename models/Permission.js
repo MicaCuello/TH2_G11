@@ -1,8 +1,8 @@
-// models/Role.js
+// models/Permission.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../connection/connection.js';
 
-const Role = sequelize.define('Role', {
+const Permission = sequelize.define('Permission', {
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -10,4 +10,4 @@ const Role = sequelize.define('Role', {
 });
 
 // Exportar el modelo
-export default Role;
+export default Permission;

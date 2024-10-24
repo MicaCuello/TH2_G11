@@ -12,6 +12,9 @@ app.get('/users', (_req, res) => {
 });
 
 // Arranca el servidor
-app.listen(8000, () => {
-  console.log('Servidor corriendo en http://localhost:8000');
+app.listen(3000, () => {
+  console.log('Servidor corriendo en http://localhost:3000');
 });
+
+// Llamar a la función para iniciar el servidor
+startServer();
