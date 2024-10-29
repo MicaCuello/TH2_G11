@@ -1,7 +1,5 @@
 import sequelize from './connection/connection.js';
-import User from './models/User.js'; 
-import Role from './models/Role.js';
-import Tarea from './models/Tarea.js';
+import {Role, User, Tarea} from './models/index.js';
 
 const initializeData = async () => {
   try {

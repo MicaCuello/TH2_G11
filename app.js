@@ -15,10 +15,9 @@ const PORT = process.env.PORT || 3000;
 
 sequelize.sync({ force: false })
   .then(async () => {
+    
+    initializeData();
     console.log('Base de datos sincronizada');
-
-    // Inicializar los datos de prueba
-    await initializeData.js();
 
     app.listen(PORT, () => {
       console.log(`Servidor corriendo en el puerto ${PORT}`);
