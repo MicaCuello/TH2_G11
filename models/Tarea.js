@@ -1,56 +1,39 @@
-// models/Tarea.js
+import { DataTypes } from 'sequelize'; // Cambiar require por import
+import sequelize from '../connection/connection.js'; 
+import User from './User.js'; // Cambiar require por import
 
-import { DataTypes, Model } from "sequelize";
-import connection from "../connection/connection.js";
-
-class Tarea extends Model {}
-
-// Inicializamos el modelo Tarea y definimos sus atributos y opciones.
-Tarea.init(
-  {
-    // Atributo 'descripcion' para la descripción de la tarea.
-    descripcion: {
-      type: DataTypes.STRING, // El tipo de dato es una cadena de texto.
-      allowNull: false, // Este campo es obligatorio.
-    },
-    
-    // Atributo 'estado' para el estado de la tarea.
-    estado: {
-      type: DataTypes.STRING, // El tipo de dato es una cadena de texto.
-      allowNull: false, // Este campo es obligatorio.
-      defaultValue: 'not started', // Valor por defecto.
-    },
-
-    // Atributo 'fechaCreacion' para almacenar la fecha de creación.
-    fechaCreacion: {
-      type: DataTypes.DATE, // El tipo de dato es una fecha.
-      defaultValue: DataTypes.NOW, // Valor por defecto es la fecha actual.
-    },
-
-    // Atributo 'fechaFinalizacion' para almacenar la fecha de finalización.
-    fechaFinalizacion: {
-      type: DataTypes.DATE, // El tipo de dato es una fecha.
-      allowNull: true, // Este campo puede ser nulo.
-    },
-
-    // Atributo 'userId' para almacenar el ID del usuario asignado a la tarea.
-    userId: {
-      type: DataTypes.INTEGER, // El tipo de dato es un entero (referencia al usuario).
-      allowNull: false, // Este campo es obligatorio.
-      references: {
-        model: 'Users', // Nombre de la tabla de usuarios (asegúrate de que tienes una tabla 'Users').
-        key: 'id', // La clave primaria de la tabla de usuarios.
-      },
-    },
+const Tarea = sequelize.define('Tarea', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
   },
-  {
-    // Opciones adicionales para configurar el modelo.
-    sequelize: connection, // Conexión a la base de datos.
-    modelName: "Tarea", // Nombre del modelo.
-    tableName: "Tareas", // Nombre de la tabla en la base de datos.
-    timestamps: false, // Desactiva la creación automática de las columnas createdAt y updatedAt.
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  startDate: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  endDate: {
+    type: DataTypes.DATE
+  },
+  status: {
+    type: DataTypes.ENUM('PENDIENTE', 'TERMINADO', 'EN PROCESO'),
+    defaultValue: 'PENDIENTE'
+  },
+  comments: {
+    type: DataTypes.TEXT,
+    allowNull: true
   }
-);
+}, {
+  timestamps: false
+});
 
-// Exportamos el modelo para que pueda ser utilizado en otras partes de la aplicación.
-export default Tarea;
+// Relación con el usuario (quien la creó y a quién está asignada)
+Tarea.belongsTo(User, { as: 'createdBy', foreignKey: 'createdById' });
+Tarea.belongsTo(User, { as: 'assignedTo', foreignKey: 'assignedToId' });
+
+export default Tarea; // Cambiar module.exports por export default

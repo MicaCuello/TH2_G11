@@ -1,21 +1,17 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const UserControllers_1 = __importDefault(require("../controllers/UserControllers"));
+// routes/userRoutes.js
 
-const router = express_1.default.Router();
-const userControllers = new UserControllers_1.default();
+import express from 'express'; // Cambia require por import
+import UserController from '../controllers/UserController.js'; // Cambia require por import y agrega .js
 
-// Definimos las rutas y sus respectivos métodos del controlador.
-router.get('/users', userControllers.getAllUsers); // Obtener todos los usuarios
-router.get('/users/:id', userControllers.getUserById); // Obtener un usuario por ID
-router.post('/users', userControllers.createUser); // Crear un nuevo usuario
-router.put('/users/:id', userControllers.updateUser); // Actualizar un usuario existente
-router.delete('/users/:id', userControllers.deleteUser); // Eliminar un usuario
+const router = express.Router();
 
-const _default = router;
-export { _default as default };
+// Crear un usuario
+router.post('/', UserController.createUser);
 
+// Listar todos los usuarios
+router.get('/', UserController.listUsers);
+
+// Eliminar un usuario por ID
+router.delete('/:id', UserController.deleteUser);
+
+export default router; // Exporta el router como exportación por defecto
