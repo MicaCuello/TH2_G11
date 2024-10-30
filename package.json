@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "description": "Trabajo Practico Final Taller de Herramientas 2",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon index.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",

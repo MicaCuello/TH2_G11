@@ -1,13 +1,13 @@
-// models/Role.js
-import { DataTypes } from 'sequelize';
+import { DataTypes } from 'sequelize'; // Cambia require por import
 import sequelize from '../connection/connection.js';
 
 const Role = sequelize.define('Role', {
-  nombre: {
+  name: {
     type: DataTypes.STRING,
-    allowNull: false,
-  },
+    allowNull: false
+  }
+}, {
+  timestamps: false
 });
 
-// Exportar el modelo
-export default Role;
+export default Role; // Exporta Role como exportación por defecto

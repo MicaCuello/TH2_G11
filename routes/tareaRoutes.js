@@ -1,15 +1,17 @@
 // routes/tareaRoutes.js
-import { Router } from 'express';
-import { crearTarea, listarTareas } from '../controllers/TareaController';
-import authorizeRoles from '../middleware/authorization.js'; // Asegúrate de importar el middleware
-import { ROLES } from '../models/Role.js'; // Asegúrate de importar los roles
 
-const router = Router();
+import express from 'express'; // Cambia require por import
+import TareaController from '../controllers/TareaController.js'; // Cambia require por import y agrega .js
 
-// Ruta para crear una tarea (solo para usuarios normales y administradores)
-router.post('/tareas', authorizeRoles(ROLES.NORMAL_USER.name, ROLES.ADMIN.name), crearTarea);
+const router = express.Router();
 
-// Ruta para listar todas las tareas (solo para administradores)
-router.get('/tareas', authorizeRoles(ROLES.ADMIN.name), listarTareas);
+// Crear una tarea
+router.post('/', TareaController.createTarea);
 
-export default router;
+// Listar todas las tareas
+router.get('/', TareaController.listTareas);
+
+// Cerrar una tarea (marcar como "TERMINADO") por ID
+router.put('/close/:id', TareaController.closeTarea);
+
+export default router; // Exporta el router como exportación por defecto

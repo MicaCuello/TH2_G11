@@ -1,30 +1,35 @@
-// models/User.js
 import { DataTypes } from 'sequelize';
-import sequelize from '../connection/connection.js';
-import Role from './Role.js';
+import sequelize from '../connection/connection.js'; // Importa sequelize
+import Role from '../models/Role.js'; // Asegúrate de que la ruta sea correcta
 
 const User = sequelize.define('User', {
-  nombre: {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  username: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
-  },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  RoleId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Role,
-      key: 'id',
-    },
-  },
+    validate: {
+      isEmail: true
+    }
+  }
+}, {
+  timestamps: false
 });
 
-// Exportar el modelo
-export default User;
+// Relación con Role
+User.belongsTo(Role, { foreignKey: 'roleId' });
+
+export default User; // Exportar el modelo User

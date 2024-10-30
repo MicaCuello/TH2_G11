@@ -1,85 +1,61 @@
-// controllers/TareaController.js
-const Tarea = require('../models/Tarea');
-const Usuario = require('../models/Usuario');
+import Tarea from '../models/Tarea.js'; // Cambiar require por import
+import User from '../models/User.js'; // Cambiar require por import
 
-// Función para crear una nueva tarea
-const crearTarea = async (req, res) => {
+const TareaController = {
+  // Crear una tarea
+  async createTarea(req, res) {
     try {
-        const { descripcion, usuarioId } = req.body;
-        const nuevaTarea = await Tarea.create({ descripcion, usuarioId });
-        res.status(201).json(nuevaTarea);
+      const { description, assignedToId } = req.body;
+      const createdById = req.user.id; // Se asume que el ID del usuario creador viene de req.user
+
+      const tarea = await Tarea.create({
+        description,
+        createdById,
+        assignedToId
+      });
+
+      res.status(201).json(tarea);
     } catch (error) {
-        console.error(error); // Agrega un log para el error
-        res.status(500).json({ error: error.message });
+      res.status(500).json({ message: 'Error al crear la tarea', error });
     }
+  },
+
+  // Listar todas las tareas
+  async listTareas(req, res) {
+    try {
+      const tareas = await Tarea.findAll({
+        include: [
+          { model: User, as: 'createdBy', attributes: ['username'] },
+          { model: User, as: 'assignedTo', attributes: ['username'] }
+        ]
+      });
+
+      res.status(200).json(tareas);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al listar tareas', error });
+    }
+  },
+
+  // Cerrar una tarea (cambiar estado a 'TERMINADO')
+  async closeTarea(req, res) {
+    try {
+      const { id } = req.params;
+
+      const tarea = await Tarea.findByPk(id);
+      if (!tarea) {
+        return res.status(404).json({ message: 'Tarea no encontrada' });
+      }
+
+      tarea.status = 'TERMINADO';
+      tarea.endDate = new Date();
+
+      await tarea.save();
+
+      res.status(200).json({ message: 'Tarea cerrada exitosamente', tarea });
+    } catch (error) {
+      res.status(500).json({ message: 'Error al cerrar la tarea', error });
+    }
+  }
 };
 
-// Función para listar tareas según el rol del usuario
-const listarTareas = async (req, res) => {
-    try {
-        const usuarioId = req.user.id; // Suponiendo que tienes el id del usuario en el token
-        const rol = req.user.role; // Y el rol del usuario
-
-        let tareas;
-
-        if (rol === 'ADMIN') {
-            // Un administrador puede ver todas las tareas
-            tareas = await Tarea.findAll();
-        } else {
-            // Un usuario normal solo puede ver sus propias tareas
-            tareas = await Tarea.findAll({
-                where: { usuarioId: usuarioId }
-            });
-        }
-
-        res.status(200).json(tareas);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Función para actualizar una tarea
-const actualizarTarea = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { descripcion, estado } = req.body;
-
-        const [updated] = await Tarea.update({ descripcion, estado }, {
-            where: { id }
-        });
-
-        if (updated) {
-            const tareaActualizada = await Tarea.findOne({ where: { id } });
-            return res.status(200).json(tareaActualizada);
-        }
-
-        throw new Error('Tarea no encontrada');
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Función para eliminar una tarea
-const eliminarTarea = async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const deleted = await Tarea.destroy({
-            where: { id }
-        });
-
-        if (deleted) {
-            return res.status(204).send();
-        }
-
-        throw new Error('Tarea no encontrada');
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: error.message });
-    }
-};
-
-// Exportamos las funciones para que puedan ser utilizadas en las rutas
-module.exports = { crearTarea, listarTareas, actualizarTarea, eliminarTarea };
+export default TareaController;
