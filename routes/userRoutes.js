@@ -1,17 +1,30 @@
-// routes/userRoutes.js
-
-import express from 'express'; // Cambia require por import
-import UserController from '../controllers/UserController.js'; // Cambia require por import y agrega .js
+import express from "express";
+import UserController from "../controllers/UserController.js";
+import auth from "../middleware/authentication.js";
+import permission from "../middleware/roleAuth.js";
 
 const router = express.Router();
 
 // Crear un usuario
-router.post('/', UserController.createUser);
+router.post("/", auth, permission("crearUsuario"), UserController.createUser);
 
 // Listar todos los usuarios
-router.get('/', UserController.listUsers);
+router.get("/", auth, permission("listarUsuarios"), UserController.listUsers);
 
 // Eliminar un usuario por ID
-router.delete('/:id', UserController.deleteUser);
+router.delete(
+  "/:id",
+  auth,
+  permission("eliminarUsuario"),
+  UserController.deleteUser
+);
 
-export default router; // Exporta el router como exportación por defecto
+// Actualiza un usuario por ID
+router.put(
+  "/:id",
+  auth,
+  permission("actualizarUsuario"),
+  UserController.updateUser
+);
+
+export default router;

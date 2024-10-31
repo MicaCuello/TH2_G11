@@ -1,6 +1,6 @@
-import { DataTypes } from 'sequelize'; // Cambiar require por import
+import { DataTypes } from 'sequelize'; 
 import sequelize from '../connection/connection.js'; 
-import User from './User.js'; // Cambiar require por import
+import User from '../models/User.js';
 
 const Tarea = sequelize.define('Tarea', {
   id: {

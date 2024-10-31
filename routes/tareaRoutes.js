@@ -1,17 +1,17 @@
-// routes/tareaRoutes.js
-
-import express from 'express'; // Cambia require por import
-import TareaController from '../controllers/TareaController.js'; // Cambia require por import y agrega .js
+import express from 'express'; 
+import TareaController from '../controllers/TareaController.js'; 
+import auth from '../middleware/authentication.js';
+import permission from '../middleware/roleAuth.js';
 
 const router = express.Router();
 
 // Crear una tarea
-router.post('/', TareaController.createTarea);
+router.post('/', auth, permission('crearTarea'), TareaController.createTarea);
 
 // Listar todas las tareas
-router.get('/', TareaController.listTareas);
+router.get('/', auth, permission('listarTarea'), TareaController.listTareas);
 
 // Cerrar una tarea (marcar como "TERMINADO") por ID
-router.put('/close/:id', TareaController.closeTarea);
+router.put('/close/:id', auth, permission('cerrarTarea'),  TareaController.closeTarea);
 
-export default router; // Exporta el router como exportación por defecto
+export default router;

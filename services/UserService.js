@@ -1,4 +1,3 @@
-// services/UserService.js
 import { User, Role } from "../models/index.js"; // Usa import para importar los modelos.
 
 class UserService {

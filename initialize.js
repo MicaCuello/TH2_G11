@@ -1,10 +1,9 @@
 import sequelize from './connection/connection.js';
-import User from './models/User.js'; 
-import Role from './models/Role.js';
-import Tarea from './models/Tarea.js';
+import {Role, User, Tarea} from './models/index.js';
 
 const initializeData = async () => {
   try {
+    
     // Sincronizar las tablas
     await sequelize.sync({ force: true });
 
@@ -15,22 +14,22 @@ const initializeData = async () => {
 
     // Crear usuarios
     const userPrincipal = await User.create({
-      username: 'principalUser',
-      password: 'password123',
+      username: 'PrincipalUser',
+      password: 'PrincipalUser123',
       email: 'principal@example.com',
       roleId: rolePrincipal.id
     });
 
     const userAdmin = await User.create({
-      username: 'adminUser',
-      password: 'password123',
+      username: 'AdminUser',
+      password: 'AdminUser123',
       email: 'admin@example.com',
       roleId: roleAdmin.id
     });
 
     const userNormal = await User.create({
-      username: 'normalUser',
-      password: 'password123',
+      username: 'NormalUser',
+      password: 'NormalUser123',
       email: 'normal@example.com',
       roleId: roleNormal.id
     });

@@ -1,7 +1,12 @@
-import { DataTypes } from 'sequelize'; // Cambia require por import
+import { DataTypes } from 'sequelize'; 
 import sequelize from '../connection/connection.js';
 
 const Role = sequelize.define('Role', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -10,4 +15,4 @@ const Role = sequelize.define('Role', {
   timestamps: false
 });
 
-export default Role; // Exporta Role como exportación por defecto
+export default Role; 

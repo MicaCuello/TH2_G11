@@ -1,7 +1,8 @@
-import User from '../models/User.js'; // Asegúrate de que la ruta sea correcta
-import Role from '../models/Role.js'; // Importar Role si es necesario
+import User from '../models/User.js'; 
+import Role from '../models/Role.js';
 
 const UserController = {
+  
   // Crear un usuario
   async createUser(req, res) {
     try {
@@ -53,7 +54,29 @@ const UserController = {
     } catch (error) {
       res.status(500).json({ message: 'Error al eliminar el usuario', error });
     }
+  },
+
+  // Actualizar un usuario por ID
+  async updateUser(req, res) {
+    try {
+        const { id } = req.params;
+        const { username, password, email, roleId } = req.body;
+        const user = await User.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+        // Actualizar los campos del usuario
+        user.username = username || user.username;
+        user.password = password || user.password;
+        user.email = email || user.email;
+        user.roleId = roleId || user.roleId;
+
+        await user.save();
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: 'Error al actualizar el usuario', error });
+    }
   }
 };
 
-export default UserController; // Exportar el controlador
+export default UserController; 

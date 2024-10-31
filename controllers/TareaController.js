@@ -1,12 +1,13 @@
-import Tarea from '../models/Tarea.js'; // Cambiar require por import
-import User from '../models/User.js'; // Cambiar require por import
+import Tarea from '../models/Tarea.js'; 
+import User from '../models/User.js'; 
 
 const TareaController = {
+  
   // Crear una tarea
   async createTarea(req, res) {
     try {
       const { description, assignedToId } = req.body;
-      const createdById = req.user.id; // Se asume que el ID del usuario creador viene de req.user
+      const createdById = req.user.id; 
 
       const tarea = await Tarea.create({
         description,

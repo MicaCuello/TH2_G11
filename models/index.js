@@ -1,16 +1,22 @@
-// models/index.js
+import User from './User.js'; 
 import Role from './Role.js';
-import Permission from './Permission.js';
-import RolePermission from './RolePermission.js';
-import User from './User.js'; // Asegúrate de que también importas User
+import Tarea from './Tarea.js';
 
-// Establecemos las relaciones
-Role.hasMany(User, { foreignKey: 'RoleId', sourceKey: 'id', as: 'users' });
-User.belongsTo(Role, { foreignKey: 'RoleId', targetKey: 'id', as: 'role' });
+// Configurar relaciones entre modelos
+Role.hasMany(User, { foreignKey: 'roleId', as: 'users' });
+User.belongsTo(Role, { foreignKey: 'roleId', as: 'role' });
 
-// Relaciones entre Role y Permission
-Role.hasMany(RolePermission, { foreignKey: 'RoleId' });
-Permission.hasMany(RolePermission, { foreignKey: 'PermissionId' });
+User.hasMany(Tarea, { foreignKey: 'createdById', as: 'createdTasks' });
+User.hasMany(Tarea, { foreignKey: 'assignedToId', as: 'assignedTasks' });
+Tarea.belongsTo(User, { foreignKey: 'createdById', as: 'creator' });
+Tarea.belongsTo(User, { foreignKey: 'assignedToId', as: 'assignee' });
 
-export { Role, Permission, RolePermission, User };
+// Exportar los modelos
+export { Role, User, Tarea };
 
+// Exportación por defecto de un objeto que contiene todos los modelos
+export default{
+    Role,
+    User,
+    Tarea
+};

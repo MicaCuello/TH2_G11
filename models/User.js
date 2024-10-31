@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
-import sequelize from '../connection/connection.js'; // Importa sequelize
-import Role from '../models/Role.js'; // Asegúrate de que la ruta sea correcta
+import sequelize from '../connection/connection.js';
+import Role from '../models/Role.js'; 
 
 const User = sequelize.define('User', {
   id: {
