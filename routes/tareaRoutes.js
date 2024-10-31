@@ -14,4 +14,4 @@ router.get('/', auth, permission('listarTarea'), TareaController.listTareas);
 // Cerrar una tarea (marcar como "TERMINADO") por ID
 router.put('/close/:id', auth, permission('cerrarTarea'),  TareaController.closeTarea);
 
-export default router;
+export default router; // Exporta el router como exportación por defecto

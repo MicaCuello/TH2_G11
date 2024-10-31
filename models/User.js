@@ -9,8 +9,19 @@ const User = sequelize.define('User', {
     primaryKey: true
   },
   username: {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  username: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false
     unique: true
   },
   password: {
@@ -21,6 +32,18 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      isEmail: true
+    }
+  }
+}, {
+  timestamps: false
+});
+
+// Relación con Role
+User.belongsTo(Role, { foreignKey: 'roleId' });
+
+export default User; // Exportar el modelo User
     validate: {
       isEmail: true
     }
