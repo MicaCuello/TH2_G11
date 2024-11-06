@@ -1,6 +1,8 @@
 import sequelize from './connection/connection.js';
 import {Role, User, Tarea} from './models/index.js';
 
+
+// VER METODO> BULK CREATE 
 const initializeData = async () => {
   try {
     
