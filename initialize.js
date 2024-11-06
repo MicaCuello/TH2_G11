@@ -5,51 +5,28 @@ import {Role, User, Tarea} from './models/index.js';
 // VER METODO> BULK CREATE 
 const initializeData = async () => {
   try {
-    
     // Sincronizar las tablas
     await sequelize.sync({ force: true });
 
     // Crear roles
-    const rolePrincipal = await Role.create({ name: 'Principal' });
-    const roleAdmin = await Role.create({ name: 'Administrador' });
-    const roleNormal = await Role.create({ name: 'Normal' });
+    const roles = await Role.bulkCreate([
+      { name: 'Principal' },
+      { name: 'Administrador' },
+      { name: 'Normal' }
+    ]);
 
-    // Crear usuarios
-    const userPrincipal = await User.create({
-      username: 'PrincipalUser',
-      password: 'PrincipalUser123',
-      email: 'principal@example.com',
-      roleId: rolePrincipal.id
-    });
+    // Crear usuarios con referencia a los roles
+    const users = await User.bulkCreate([
+      { username: 'PrincipalUser', password: 'PrincipalUser123', email: 'principal@example.com', roleId: roles[0].id },
+      { username: 'AdminUser', password: 'AdminUser123', email: 'admin@example.com', roleId: roles[1].id },
+      { username: 'NormalUser', password: 'NormalUser123', email: 'normal@example.com', roleId: roles[2].id }
+    ]);
 
-    const userAdmin = await User.create({
-      username: 'AdminUser',
-      password: 'AdminUser123',
-      email: 'admin@example.com',
-      roleId: roleAdmin.id
-    });
-
-    const userNormal = await User.create({
-      username: 'NormalUser',
-      password: 'NormalUser123',
-      email: 'normal@example.com',
-      roleId: roleNormal.id
-    });
-
-    // Crear tareas
-    const tarea1 = await Tarea.create({
-      description: 'Tarea 1 de prueba',
-      status: 'PENDIENTE',
-      createdById: userAdmin.id,
-      assignedToId: userNormal.id
-    });
-
-    const tarea2 = await Tarea.create({
-      description: 'Tarea 2 de prueba',
-      status: 'EN PROCESO',
-      createdById: userAdmin.id,
-      assignedToId: userNormal.id
-    });
+    // Crear tareas y asignarlas a los usuarios
+    await Tarea.bulkCreate([
+      { description: 'Tarea 1 de prueba', status: 'PENDIENTE', createdById: users[1].id, assignedToId: users[2].id },
+      { description: 'Tarea 2 de prueba', status: 'EN PROCESO', createdById: users[1].id, assignedToId: users[2].id }
+    ]);
 
     console.log('Datos iniciales insertados correctamente.');
   } catch (error) {
