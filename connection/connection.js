@@ -4,7 +4,7 @@ const sequelize = new Sequelize("tp_taller", "sa", "mica123", {
   host: "localhost",
   dialect: "mssql",
   port: 1433,
-  logging: console.log, // Habilita el logging para depurar
+  logging: console.log, // Habilita el logging / registro de consultas para depurar 
 });
 
 // Función para probar la conexión

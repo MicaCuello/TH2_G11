@@ -2,12 +2,28 @@ import Tarea from "../models/Tarea.js";
 import User from "../models/User.js";
 
 const TareaController = {
-  // Crear una tarea
   async createTarea(req, res) {
     try {
-      const { description, assignedToId } = req.body;
-      const createdById = req.user.id;
+      const { description, assignedToId, createdById } = req.body;
 
+      // espera que se resuelva la promesa de arriba,
+      const tarea = await Tarea.create({
+        description,
+        createdById,
+        assignedToId,
+      });
+
+      res.status(201).json(tarea);
+    } catch (error) {
+      res.status(500).json({ message: "Error al crear la tarea", error });
+    }
+  },
+
+  async createTarea(req, res) {
+    try {
+      const { description, assignedToId, createdById } = req.body;
+
+      // espera que se resuelva la promesa de arriba,
       const tarea = await Tarea.create({
         description,
         createdById,
@@ -23,6 +39,7 @@ const TareaController = {
   // Listar todas las tareas
   async listTareas(req, res) {
     try {
+      // find all metodo para obtener los registros de la base de datos
       const tareas = await Tarea.findAll({
         include: [
           { model: User, as: "createdBy", attributes: ["username"] },

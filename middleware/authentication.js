@@ -1,4 +1,5 @@
 import basicAuth from 'basic-auth';
+// para credenciales http en cabecera de solicitudes enviadas
 import User from '../models/User.js'; 
 
 const authentication =  async (req, res, next) => {

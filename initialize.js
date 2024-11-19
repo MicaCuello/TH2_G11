@@ -23,7 +23,7 @@ const initializeData = async () => {
     ]);
 
     // Crear tareas y asignarlas a los usuarios
-    await Tarea.bulkCreate([
+    const tareas = await Tarea.bulkCreate([
       { description: 'Tarea 1 de prueba', status: 'PENDIENTE', createdById: users[1].id, assignedToId: users[2].id },
       { description: 'Tarea 2 de prueba', status: 'EN PROCESO', createdById: users[1].id, assignedToId: users[2].id }
     ]);
